@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { CartContext } from "../../context/cartContext";
 
 const CartNavWrapper = styled.div`
   width: 100%;
@@ -48,6 +49,16 @@ const CartLinkText = styled.div`
 const CartNavSection = () => {
   const navigate = useNavigate();
 
+  const { count, setCountHandler } = useContext(CartContext);
+
+  useEffect(() => {
+    if (localStorage.getItem("cartItem")) {
+      setCountHandler();
+    } else {
+      localStorage.setItem("cartItem", []);
+    }
+  }, [setCountHandler]);
+
   return (
     <CartNavWrapper>
       <CartNavInner>
@@ -56,7 +67,7 @@ const CartNavSection = () => {
             navigate(`/cart`);
           }}
         >
-          <CartLinkCount>1</CartLinkCount>
+          <CartLinkCount>{count}</CartLinkCount>
           <CartLinkText>장바구니</CartLinkText>
         </CartLinkDiv>
       </CartNavInner>

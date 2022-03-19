@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { getItemList } from "../../apis/getItemList";
+import { CartContext } from "../../context/cartContext";
 
 const Wrapper = styled.div`
   display: flex;
@@ -13,7 +14,7 @@ const Wrapper = styled.div`
 const SectionTitle = styled.div`
   margin: 60px 0px 100px 0px;
   font-size: 28px;
-  font-weight: bold;
+  font-weight: 800;
 `;
 
 const FoodItemArea = styled.div`
@@ -36,6 +37,7 @@ const HomeListSection = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentScrollY, setCurrentScrollY] = useState(0);
   const [heightChecker, setHeightChecker] = useState(false);
+  const [isHeightLoading, setIsHeightLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const ref = useRef(null);
@@ -51,23 +53,28 @@ const HomeListSection = () => {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (document.body.clientHeight <= window.innerHeight) {
-        getItemList({ pageNumber: currentPage }).then((res) => {
-          setItemList((itemList) => itemList.concat(res.data));
-          setCurrentPage((currentPage) => currentPage + 1);
-          setHeightChecker(!heightChecker);
-        });
-      } else {
-        setIsLoaded(true);
-      }
-    }, 1);
-  }, [heightChecker, currentPage]);
+    if (!isHeightLoading) {
+      setIsHeightLoading(true);
+      setTimeout(() => {
+        if (document.body.clientHeight <= window.innerHeight) {
+          getItemList({ pageNumber: currentPage }).then((res) => {
+            setItemList((itemList) => itemList.concat(res.data));
+            setCurrentPage((currentPage) => currentPage + 1);
+            setHeightChecker((heightChecker) => !heightChecker);
+            setIsHeightLoading(false);
+          });
+        } else {
+          setIsLoaded(true);
+        }
+      }, 1);
+    }
+  }, [isHeightLoading, heightChecker, currentPage, isLoaded]);
 
   useEffect(() => {
     if (
       isLoaded &&
-      window.scrollY >= ref.current.offsetTop - window.innerHeight - 1
+      window.scrollY >= ref.current.offsetTop - window.innerHeight - 1 &&
+      currentPage < 7
     ) {
       setIsLoaded(false);
       getItemList({ pageNumber: currentPage }).then((res) => {
@@ -105,27 +112,51 @@ const FoodImage = styled.img`
   width: 100%;
   height: auto;
   border-radius: 12px;
+  cursor: pointer;
 `;
 
 const FoodTitle = styled.span`
   margin: 10px 0px;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 500;
   padding: 0px 8px;
 `;
 
 const FoodPrice = styled.span`
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 800;
   padding: 0px 8px;
 `;
 
 const FoodItem = (props) => {
   const IMG_PRE_URL = "https://image.wingeat.com/";
 
+  const { setCountHandler } = useContext(CartContext);
+
+  const itemClickHandler = () => {
+    let cartItemList = [];
+    if (localStorage.getItem("cartItem")) {
+      cartItemList = JSON.parse(localStorage.getItem("cartItem"));
+      let tempIndex = cartItemList.findIndex((x) => x.id === props.item.id);
+      if (tempIndex !== -1) {
+        cartItemList[tempIndex].count += 1;
+      } else {
+        cartItemList.push({ ...props.item, count: 1 });
+      }
+    } else {
+      cartItemList = [{ ...props.item, count: 1 }];
+    }
+    localStorage.setItem("cartItem", JSON.stringify(cartItemList));
+    alert("장바구니에 상품이 추가되었습니다.");
+    setCountHandler();
+  };
+
   return (
     <FoodItemContainer>
       <FoodImage
+        onClick={() => {
+          itemClickHandler();
+        }}
         id={`image${props.item.id}`}
         src={`${IMG_PRE_URL}${props.item.image}`}
       />

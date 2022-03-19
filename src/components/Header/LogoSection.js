@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const LogoWrapper = styled.div`
@@ -6,15 +7,22 @@ const LogoWrapper = styled.div`
   width: 100%;
   justify-content: center;
   padding: 15px 0px 50px 0px;
+  cursor: pointer;
 `;
 
 const LogoSection = () => {
+  const navigate = useNavigate();
+
   return (
-    <LogoWrapper>
+    <LogoWrapper
+      onClick={() => {
+        navigate(`/`);
+      }}
+    >
       <img
         src={"https://image.wingeat.com/logo/images/we_logo_center.png"}
-        width={150}
-        height={55}
+        width={180}
+        height={"auto"}
         alt={"This is wingeat logo."}
       />
     </LogoWrapper>

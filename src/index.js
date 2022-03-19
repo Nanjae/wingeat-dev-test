@@ -6,16 +6,19 @@ import reportWebVitals from "./reportWebVitals";
 import Header from "./components/Header/Header";
 import Home from "./routes/Home";
 import Cart from "./routes/Cart";
+import CartContextProvider from "./context/cartContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route index element={<Home />} />
-        <Route path="cart" element={<Cart />} />
-        <Route path="*" element={<Home />} />
-      </Routes>
+      <CartContextProvider>
+        <Header />
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="cart" element={<Cart />} />
+          <Route path="*" element={<Home />} />
+        </Routes>
+      </CartContextProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")

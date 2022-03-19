@@ -1,17 +1,19 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import CartListSection from "./CartListSection";
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
 
 const CartContainer = () => {
-  const navigate = useNavigate();
-
   return (
-    <div
-      onClick={() => {
-        navigate(`/`);
-      }}
-    >
-      CartContainer
-    </div>
+    <Wrapper>
+      <CartListSection />
+    </Wrapper>
   );
 };
 
