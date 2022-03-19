@@ -8,6 +8,10 @@ const LogoWrapper = styled.div`
   justify-content: center;
   padding: 15px 0px 50px 0px;
   cursor: pointer;
+  @media screen and (max-width: 900px) {
+    justify-content: flex-start;
+    padding: 30px 30px 50px 30px;
+  }
 `;
 
 const LogoSection = () => {

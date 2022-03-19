@@ -43,12 +43,14 @@ const HomeListSection = () => {
   const ref = useRef(null);
 
   useEffect(() => {
-    window.addEventListener("scroll", () => {
+    const handleScroll = () => {
       setCurrentScrollY(window.scrollY);
-    });
+    };
+
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener("scroll");
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 

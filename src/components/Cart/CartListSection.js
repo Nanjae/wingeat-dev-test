@@ -198,6 +198,7 @@ const ItemRemove = styled.div`
   position: absolute;
   right: 20px;
   top: 20px;
+  cursor: pointer;
 `;
 
 const ItemTotalBox = styled.div`
@@ -263,7 +264,7 @@ const CartItem = (props) => {
           checked={props.item.isChecked}
           onChange={props.toggleCheck}
         />
-        <label for={`checkbox${props.item.id}`}></label>
+        <label htmlFor={`checkbox${props.item.id}`}></label>
         <ItemName>{props.item.itemName}</ItemName>
       </ItemInputBox>
       <RowDiv>

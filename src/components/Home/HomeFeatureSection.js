@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getFeatureList } from "../../apis/getFeatureList";
+import useWindowWidth from "../../hooks/useWindowWidth";
 
 const Wrapper = styled.div`
   display: flex;
@@ -44,12 +45,30 @@ const SliderNavCircle = styled.div`
   cursor: pointer;
 `;
 
+const SliderMbNavBox = styled.div`
+  z-index: 2;
+  display: flex;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  justify-content: space-between;
+  padding: 4px 10px 5px 10px;
+  background-color: #000000;
+  color: #ffffff;
+  opacity: 0.7;
+  font-size: 16px;
+  border-radius: 16px;
+  font-weight: 200;
+`;
+
 const HomeFeatureSection = () => {
   const [itemList, setItemList] = useState([]);
   const [currentItem, setCurrentItem] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [downX, setDownX] = useState(-1);
   const [upX, setUpX] = useState(-1);
+
+  const windowWidth = useWindowWidth();
 
   useEffect(() => {
     getFeatureList().then((res) => {
@@ -113,28 +132,30 @@ const HomeFeatureSection = () => {
               );
             })}
         </SliderItemDiv>
-        <SliderNavBar>
-          {itemList &&
-            itemList.length > 0 &&
-            itemList.map((_, index) => {
-              return (
-                <SliderNavCircle
-                  onClick={() => {
-                    setCurrentItem(index);
-                  }}
-                  currentItem={currentItem}
-                  itemIndex={index}
-                  key={index}
-                />
-              );
-            })}
-        </SliderNavBar>
+        {windowWidth && windowWidth > 900 ? (
+          <SliderNavBar>
+            {itemList &&
+              itemList.length > 0 &&
+              itemList.map((_, index) => {
+                return (
+                  <SliderNavCircle
+                    onClick={() => {
+                      setCurrentItem(index);
+                    }}
+                    currentItem={currentItem}
+                    itemIndex={index}
+                    key={index}
+                  />
+                );
+              })}
+          </SliderNavBar>
+        ) : (
+          <SliderMbNavBox>{`${currentItem + 1} / 5`}</SliderMbNavBox>
+        )}
       </SliderItemArea>
     </Wrapper>
   );
 };
-
-// <-- Slider Item (BEGIN) -->
 
 const SliderItemContainer = styled.div`
   user-select: none;
@@ -158,14 +179,18 @@ const SliderItem = (props) => {
       currentItem={props.currentItem}
       itemIndex={props.itemIndex}
     >
-      <SliderItemImage
-        src={`${IMG_PRE_URL}${props.item.image}`}
-        alt={`This is wingeat feature ${props.itemIndex}.`}
-      />
+      <picture>
+        <source
+          srcSet={`${IMG_PRE_URL}${props.item.image}`}
+          media={"(min-width: 901px)"}
+        />
+        <SliderItemImage
+          src={`${IMG_PRE_URL}${props.item.mobileImage}`}
+          alt={`This is wingeat feature ${props.itemIndex}.`}
+        />
+      </picture>
     </SliderItemContainer>
   );
 };
-
-// <-- Slider Item (END) -->
 
 export default HomeFeatureSection;

@@ -8,6 +8,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 100%;
   border-bottom: 1px solid lightgray;
+
+  @media screen and (max-width: 900px) {
+    flex-direction: row-reverse;
+  }
 `;
 
 const Header = () => {

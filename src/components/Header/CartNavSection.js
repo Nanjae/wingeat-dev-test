@@ -9,6 +9,9 @@ const CartNavWrapper = styled.div`
   display: flex;
   justify-content: center;
   background-color: #f5f5f5;
+  @media screen and (max-width: 900px) {
+    background-color: transparent;
+  }
 `;
 
 const CartNavInner = styled.div`
@@ -18,6 +21,10 @@ const CartNavInner = styled.div`
   max-width: 1200px;
   width: 100%;
   height: 100%;
+  @media screen and (max-width: 900px) {
+    margin-top: 30px;
+    margin-right: 10px;
+  }
 `;
 
 const CartLinkDiv = styled.div`
