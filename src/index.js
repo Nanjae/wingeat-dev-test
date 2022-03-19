@@ -9,8 +9,8 @@ import Cart from "./routes/Cart";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Header />
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route index element={<Home />} />
         <Route path="cart" element={<Cart />} />

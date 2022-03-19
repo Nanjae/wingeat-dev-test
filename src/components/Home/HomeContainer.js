@@ -1,16 +1,12 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import HomeFeatureSection from "./HomeFeatureSection";
+import HomeListSection from "./HomeListSection";
 
 const HomeContainer = () => {
-  const navigate = useNavigate();
-
   return (
-    <div
-      onClick={() => {
-        navigate(`/cart`);
-      }}
-    >
-      HomeContainer
+    <div>
+      <HomeFeatureSection />
+      <HomeListSection />
     </div>
   );
 };
