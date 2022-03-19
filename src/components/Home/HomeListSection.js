@@ -15,6 +15,9 @@ const SectionTitle = styled.div`
   margin: 60px 0px 100px 0px;
   font-size: 28px;
   font-weight: 800;
+  @media screen and (max-width: 900px) {
+    margin: 30px 0px 70px 0px;
+  }
 `;
 
 const FoodItemArea = styled.div`
@@ -97,7 +100,7 @@ const HomeListSection = () => {
             return <FoodItem item={item} key={index} />;
           })}
       </FoodItemArea>
-      <EndObserver id={"aaa"} ref={ref} />
+      <EndObserver ref={ref} />
     </Wrapper>
   );
 };
@@ -163,7 +166,7 @@ const FoodItem = (props) => {
         src={`${IMG_PRE_URL}${props.item.image}`}
       />
       <FoodTitle>{props.item.itemName}</FoodTitle>
-      <FoodPrice>{props.item.price}원</FoodPrice>
+      <FoodPrice>{props.item.price.toLocaleString("en-US")}원</FoodPrice>
     </FoodItemContainer>
   );
 };
