@@ -14,9 +14,18 @@ const SliderItemArea = styled.div`
   justify-content: center;
   position: relative;
   width: 100%;
+  overflow: hidden;
+`;
+
+const SliderItemDiv = styled.div`
+  display: flex;
+  width: 100%;
+  margin-left: ${(props) => props.currentItem * -200}%;
+  transition: margin-left 0.5s;
 `;
 
 const SliderNavBar = styled.div`
+  z-index: 2;
   display: flex;
   position: absolute;
   bottom: 15px;
@@ -38,6 +47,9 @@ const SliderNavCircle = styled.div`
 const HomeFeatureSection = () => {
   const [itemList, setItemList] = useState([]);
   const [currentItem, setCurrentItem] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [downX, setDownX] = useState(-1);
+  const [upX, setUpX] = useState(-1);
 
   useEffect(() => {
     getFeatureList().then((res) => {
@@ -48,28 +60,59 @@ const HomeFeatureSection = () => {
   useEffect(() => {
     const nextItemTimeoutID = setTimeout(() => {
       setCurrentItem(currentItem === 4 ? 0 : currentItem + 1);
-    }, 3000);
+    }, 5000);
 
     return () => {
       clearTimeout(nextItemTimeoutID);
     };
   }, [currentItem]);
 
+  useEffect(() => {
+    if (!isDragging) {
+      if (downX - upX < -10)
+        setCurrentItem((currentItem) =>
+          currentItem === 0 ? 4 : currentItem - 1
+        );
+      if (upX - downX < -10)
+        setCurrentItem((currentItem) =>
+          currentItem === 4 ? 0 : currentItem + 1
+        );
+    }
+  }, [downX, upX, isDragging]);
+
   return (
     <Wrapper>
       <SliderItemArea>
-        {itemList &&
-          itemList.length > 0 &&
-          itemList.map((item, index) => {
-            return (
-              <SliderItem
-                item={item}
-                currentItem={currentItem}
-                itemIndex={index}
-                key={index}
-              />
-            );
-          })}
+        <SliderItemDiv
+          draggable={true}
+          onDragStart={(e) => {
+            e.preventDefault();
+
+            setIsDragging(true);
+            setDownX(e.clientX);
+          }}
+          onMouseUp={(e) => {
+            e.preventDefault();
+
+            if (isDragging) setUpX(e.clientX);
+
+            setIsDragging(false);
+          }}
+          currentItem={currentItem}
+        >
+          {itemList &&
+            itemList.length > 0 &&
+            itemList.map((item, index) => {
+              return (
+                <SliderItem
+                  item={item}
+                  currentItem={currentItem}
+                  itemIndex={index}
+                  key={index}
+                />
+              );
+            })}
+        </SliderItemDiv>
         <SliderNavBar>
           {itemList &&
             itemList.length > 0 &&
@@ -96,12 +139,10 @@ const HomeFeatureSection = () => {
 const SliderItemContainer = styled.div`
   user-select: none;
   display: flex;
-  position: ${(props) =>
-    props.currentItem === props.itemIndex ? "relative" : "absolute"};
+  position: relative;
   min-width: 100%;
+  width: 100%;
   justify-content: center;
-  opacity: ${(props) => (props.currentItem === props.itemIndex ? 1 : 0)};
-  transition: opacity 0.3s;
 `;
 
 const SliderItemImage = styled.img`
