@@ -62,21 +62,21 @@ const HomeListSection = () => {
         setIsLoaded(true);
       }
     }, 1);
-  }, [heightChecker]);
+  }, [heightChecker, currentPage]);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (
       isLoaded &&
       window.scrollY >= ref.current.offsetTop - window.innerHeight - 1
     ) {
       setIsLoaded(false);
-      await getItemList({ pageNumber: currentPage }).then((res) => {
+      getItemList({ pageNumber: currentPage }).then((res) => {
         setItemList((itemList) => itemList.concat(res.data));
         setCurrentPage((currentPage) => currentPage + 1);
         setIsLoaded(true);
       });
     }
-  }, [currentScrollY]);
+  }, [currentScrollY, currentPage, isLoaded]);
 
   return (
     <Wrapper>

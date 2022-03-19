@@ -8,14 +8,16 @@ import Home from "./routes/Home";
 import Cart from "./routes/Cart";
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Header />
-    <Routes>
-      <Route index element={<Home />} />
-      <Route path="cart" element={<Cart />} />
-      <Route path="*" element={<Home />} />
-    </Routes>
-  </BrowserRouter>,
+  <React.StrictMode>
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route index element={<Home />} />
+        <Route path="cart" element={<Cart />} />
+        <Route path="*" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
+  </React.StrictMode>,
   document.getElementById("root")
 );
 
