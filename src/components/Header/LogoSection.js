@@ -13,8 +13,8 @@ const LogoSection = () => {
     <LogoWrapper>
       <img
         src={"https://image.wingeat.com/logo/images/we_logo_center.png"}
-        width={300}
-        height={110}
+        width={150}
+        height={55}
         alt={"This is wingeat logo."}
       />
     </LogoWrapper>
